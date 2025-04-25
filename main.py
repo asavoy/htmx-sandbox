@@ -189,24 +189,33 @@ client_queues = set()
 @app.get("/sse-chat", response_class=HTMLResponse)
 async def sse_chat(request: Request):
     return templates.TemplateResponse(
-        "sse_chat.html", {"request": request, "rendered_messages": chat_messages}
+        "sse_chat.html", {"request": request, "messages": chat_messages}
     )
 
 
 @app.post("/sse-chat/post-message")
-async def sse_chat_post_message(request: Request, message: str = Form(...)):
-    template = templates.get_template("sse_chat_message.html")
-    rendered_message = template.render({"message": message})
-    chat_messages.append(rendered_message)
+async def sse_chat_post_message(
+    request: Request,
+    message_content: str = Form(...),
+    message_username: str = Form(...),
+):
+    message = {
+        "content": message_content,
+        "username": message_username,
+    }
+    chat_messages.append(message)
     for queue in client_queues:
-        queue.put_nowait(rendered_message)
-    return templates.TemplateResponse("sse_chat_form.html", {"request": request})
+        queue.put_nowait(message)
+    return templates.TemplateResponse(
+        "sse_chat_form.html", {"request": request, "username": message_username}
+    )
 
 
 @app.get("/sse-chat/messages")
 async def sse_chat_messages(request: Request):
     queue = asyncio.Queue()
     client_queues.add(queue)
+    template = templates.get_template("sse_chat_message.html")
 
     async def generate():
         try:
@@ -216,7 +225,9 @@ async def sse_chat_messages(request: Request):
 
                 message = await queue.get()
 
-                yield f"event: ChatMessageEvent\ndata: {message}\n\n"
+                rendered_message = template.render({"message": message})
+
+                yield f"event: ChatMessageEvent\ndata: {rendered_message}\n\n"
         finally:
             client_queues.remove(queue)
 
