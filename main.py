@@ -144,6 +144,10 @@ async def event_stream():
     response.headers["X-Accel-Buffering"] = "no"  # Disable buffering for Nginx
     return response
 
+@app.get("/sse-chat", response_class=HTMLResponse)
+async def sse_chat(request: Request):
+    return templates.TemplateResponse("sse_chat.html", {"request": request})
+
 @app.get("/loaders", response_class=HTMLResponse)
 async def loaders(request: Request):
     return templates.TemplateResponse("loaders.html", {"request": request})
