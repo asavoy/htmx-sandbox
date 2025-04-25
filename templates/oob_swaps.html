@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Out-of-Band Swaps{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-4">Out-of-Band Swaps Example</h2>
+    <p class="mb-4">This demonstrates updating multiple parts of a page simultaneously, even outside the target of the request.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-4 bg-blue-50 rounded-lg">
+            <h3 class="text-xl font-semibold mb-3">Click a User</h3>
+            <p class="mb-2">Click on a user to see their details and update the counters automatically:</p>
+            
+            <div class="divide-y">
+                {% for user in users %}
+                <div class="py-2">
+                    <button class="text-blue-500 hover:underline"
+                            hx-get="/user/{{ user.id }}/oob-detail"
+                            hx-target="#user-detail">
+                        {{ user.name }}
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="p-4 bg-gray-50 rounded-lg">
+            <h3 class="text-xl font-semibold mb-3">User Details</h3>
+            <div id="user-detail" class="min-h-24 p-3 border rounded">
+                <p class="text-gray-500 italic">Select a user to see their details</p>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-2 gap-4">
+                <div class="p-3 bg-green-100 rounded">
+                    <h4 class="font-medium">Total Clicks</h4>
+                    <div id="total-clicks" class="text-2xl font-bold">0</div>
+                </div>
+                
+                <div class="p-3 bg-yellow-100 rounded">
+                    <h4 class="font-medium">Last Viewed</h4>
+                    <div id="last-viewed" class="text-lg">None</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

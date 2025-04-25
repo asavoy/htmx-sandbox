@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Loaders{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-4">Loaders Example</h2>
+    <p class="mb-4">This demonstrates different ways to show loading indicators during long-running requests.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-4 bg-blue-50 rounded-lg">
+            <h3 class="text-xl font-semibold mb-3">Element Loaders</h3>
+            <p class="mb-4">The button shows a loading state during a request.</p>
+            
+            <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center"
+                    hx-get="/slow-response"
+                    hx-target="#response-area-1"
+                    hx-indicator="#spinner-1">
+                Load Data
+                <div id="spinner-1" class="htmx-indicator ml-2">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+            </button>
+            
+            <div id="response-area-1" class="mt-4 p-3 bg-white border rounded-lg min-h-16"></div>
+        </div>
+        
+        <div class="p-4 bg-gray-50 rounded-lg">
+            <h3 class="text-xl font-semibold mb-3">Region Loaders</h3>
+            <p class="mb-4">The entire target area shows a loading state.</p>
+            
+            <button class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+                    hx-get="/slow-response"
+                    hx-target="#response-area-2">
+                Load Data
+            </button>
+            
+            <div id="response-area-2" class="mt-4 p-3 bg-white border rounded-lg min-h-16 relative">
+                <div class="htmx-indicator absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center">
+                    <div class="p-4 bg-white shadow-md rounded-lg flex items-center">
+                        <svg class="animate-spin h-5 w-5 text-blue-500 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Inline Editing{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-4">Inline Editing Example</h2>
+    <p class="mb-4">Click on a user to edit their details. This demonstrates:</p>
+    <ul class="list-disc pl-5 mb-6">
+        <li>Click to swap content with an editable form</li>
+        <li>POST request to update the record</li>
+        <li>Form validation and error handling</li>
+        <li>Notification via custom event trigger</li>
+    </ul>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {% for user in users %}
+        <div class="border rounded-lg p-4 bg-gray-50" id="user-{{ user.id }}">
+            {% include "user_detail.html" %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

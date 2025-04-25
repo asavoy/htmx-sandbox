@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Modal Dialog{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-4">Modal Dialog Example</h2>
+    <p class="mb-4">This demonstrates a modal form with validation that:</p>
+    <ul class="list-disc pl-5 mb-6">
+        <li>Opens on button click using HTMX</li>
+        <li>Shows a form with validation</li>
+        <li>Displays errors without closing if validation fails</li>
+        <li>Closes and updates the page on successful submission</li>
+    </ul>
+    
+    <div class="mb-6">
+        <button class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded"
+                hx-get="/modal-form"
+                hx-target="#modals-here"
+                hx-trigger="click">
+            Open Modal Form
+        </button>
+    </div>
+    
+    <div id="result" class="mt-6">
+        <!-- Results will appear here after successful form submission -->
+    </div>
+    
+    <!-- Modals will be inserted here -->
+    <div id="modals-here"></div>
+</div>
+
+<script>
+    // Close modal when clicking outside of it or on the close button
+    document.addEventListener('click', function (event) {
+        if (event.target.matches('#modal-backdrop') || event.target.matches('.modal-close')) {
+            document.getElementById('modal-backdrop')?.remove();
+            document.getElementById('modal')?.remove();
+        }
+    });
+    
+    // Listen for escape key to close modal
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            document.getElementById('modal-backdrop')?.remove();
+            document.getElementById('modal')?.remove();
+        }
+    });
+</script>
+{% endblock %}

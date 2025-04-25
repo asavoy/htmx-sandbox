@@ -1,0 +1,8 @@
+<div class="user-card">
+    <h3 class="text-lg font-semibold mb-1">{{ user.name }}</h3>
+    <p class="text-gray-600 mb-2">{{ user.email }}</p>
+    <button class="text-blue-500 hover:underline"
+            hx-get="/user/{{ user.id }}/edit"
+            hx-target="#user-{{ user.id }}"
+            hx-swap="innerHTML">Edit</button>
+</div>
