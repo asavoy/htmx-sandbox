@@ -144,9 +144,46 @@ async def event_stream():
     response.headers["X-Accel-Buffering"] = "no"  # Disable buffering for Nginx
     return response
 
+
+chat_messages = []
+client_queues = set()
+
+
 @app.get("/sse-chat", response_class=HTMLResponse)
 async def sse_chat(request: Request):
-    return templates.TemplateResponse("sse_chat.html", {"request": request})
+    return templates.TemplateResponse("sse_chat.html", {"request": request, "rendered_messages": chat_messages})
+
+
+@app.post("/sse-chat/post-message")
+async def sse_chat_post_message(request: Request, message: str = Form(...)):
+    template = templates.get_template("sse_chat_message.html")
+    rendered_message = template.render({"message": message})
+    chat_messages.append(rendered_message)
+    for queue in client_queues:
+        queue.put_nowait(rendered_message)
+    return templates.TemplateResponse("sse_chat_form.html", {"request": request})
+
+
+@app.get("/sse-chat/messages")
+async def sse_chat_messages(request: Request):
+
+    queue = asyncio.Queue()
+    client_queues.add(queue)
+
+    async def generate():
+        try:
+            while True:
+                if await request.is_disconnected():
+                    break
+
+                message = await queue.get()
+
+                yield f"event: ChatMessageEvent\ndata: {message}\n\n"
+        finally:
+            client_queues.remove(queue)
+    
+    return StreamingResponse(generate(), media_type="text/event-stream")
+
 
 @app.get("/loaders", response_class=HTMLResponse)
 async def loaders(request: Request):

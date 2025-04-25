@@ -1,0 +1,16 @@
+<form hx-post="/sse-chat/post-message" hx-swap="innerHTML">
+  <div class="flex justify-between">
+    <input
+      type="text"
+      id="message"
+      name="message"
+      placeholder="Type your message here..."
+      class="flex-1 p-2 border rounded"
+    />
+    <button
+      class="ml-2 bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm"
+    >
+      Send
+    </button>
+  </div>
+</form>
