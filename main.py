@@ -184,4 +184,4 @@ async def submit_modal(request: Request, name: str = Form(...), email: str = For
     return response
 
 if __name__ == "__main__":
-    uvicorn.run("hello:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
