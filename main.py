@@ -105,6 +105,13 @@ async def update_user(
     return response_content
 
 
+user_clicks = {
+    1: 0,
+    2: 0,
+    3: 0,
+}
+
+
 @app.get("/oob-swaps", response_class=HTMLResponse)
 async def oob_swaps(request: Request):
     return templates.TemplateResponse(
@@ -118,14 +125,13 @@ async def user_oob_detail(request: Request, user_id: int):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
+    user_clicks[user_id] += 1
+    
     # Set up context with the user
-    context = {"request": request, "user": user}
+    context = {"request": request, "user": user, "user_clicks": user_clicks[user_id]}
 
     # Create the main response
     response = templates.TemplateResponse("user_oob_detail.html", context)
-
-    # Add out-of-band swaps
-    response.headers["HX-Trigger"] = json.dumps({"incrementClicks": "1"})
 
     return response
 

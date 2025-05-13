@@ -8,14 +8,5 @@
 <div id="last-viewed" hx-swap-oob="true">{{ user.name }}</div>
 
 <div id="total-clicks" hx-swap-oob="true" class="text-2xl font-bold">
-    <span class="clicks">0</span>
+    <span class="clicks">{{ user_clicks }}</span>
 </div>
-
-<script>
-    // Find the current counter and increment it
-    document.addEventListener('incrementClicks', function() {
-        const counter = document.querySelector('#total-clicks .clicks');
-        const currentCount = parseInt(counter.textContent) || 0;
-        counter.textContent = currentCount + 1;
-    });
-</script>
